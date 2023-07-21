@@ -1,0 +1,22 @@
+@startuml authentication
+
+left to right direction
+
+package "Core"{
+    class  "session"
+    class  "utils"
+}
+
+package "Authentication"{    
+    class  "auth_tools"  
+}
+
+package "database"{
+    class "db"
+}
+
+"session" -> "auth_tools"
+"auth_tools" -> "db"
+
+
+@enduml

@@ -11,7 +11,7 @@ auth --> system: True
 deactivate auth
 system -> sessions: add_new_session(username, db)
 activate sessions
-sessions --> system: None
+sessions --> system: continue
 deactivate sessions
 system -> system: redirect to home page
 deactivate system

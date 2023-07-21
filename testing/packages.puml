@@ -1,0 +1,28 @@
+@startuml testing
+
+package "Core" as c{
+    class  "session"
+    class  "utils"
+}
+
+package "Authentication" as a{    
+    class  "auth_tools"  
+}
+
+package "database" as d{
+    class "db"
+}
+
+package "testing" as t{
+    class "auth_tests"
+    class "db_tests"
+    class "core_tests"
+}
+
+
+"auth_tests" -up-> "auth_tools"
+"core_tests" -up-> "session"
+"db_tests" -up-> "db"
+
+
+@enduml

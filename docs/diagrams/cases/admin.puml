@@ -1,0 +1,16 @@
+@startuml admin
+
+actor "admin" as admin
+
+usecase "financial analysis" as f
+rectangle "user data" as u
+rectangle "product data" as p
+
+
+admin --> u : "check user data"
+admin --> p : "check product data"
+u -down-> f
+p -down-> f
+admin -> f : "check financials"
+
+@enduml

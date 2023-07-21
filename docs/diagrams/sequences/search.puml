@@ -1,0 +1,21 @@
+@startuml search
+actor customer
+boundary "system" as system
+usecase "login" as login  
+rectangle "database" as db 
+rectangle "authentication" as auth 
+usecase "search" as search 
+usecase "search results" as sr
+
+customer -> login
+db <-up-> system
+auth <-up-> system
+login -> search
+login <-up-> auth
+search <-up-> db
+search -> sr
+
+
+
+
+@enduml
