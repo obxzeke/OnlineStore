@@ -43,7 +43,7 @@ class UserSession:
                                     "discount": 0, "tax_rate": 0}
         return new_cart
 
-    def is_item_in_cart(self, id: str) -> bool:
+    def is_item_in_cart(self, id: int) -> bool:
         """
         Checks if an item is in the user's cart.
 
@@ -55,7 +55,7 @@ class UserSession:
         """
         return id in self.cart
 
-    def add_new_item(self, id: str, name: str, price: int, quantity: int, discount: float = 0.0, tax_rate: float = 0.05) -> None:
+    def add_new_item(self, id: int, name: str, price: int, quantity: int, discount: float = 0.0, tax_rate: float = 0.05) -> None:
         """
         Creates a new item to add to the user's cart.
 
@@ -73,7 +73,7 @@ class UserSession:
         self.cart[id] = {"name": name, "price": price, "quantity": quantity,
                          "discount": discount, "tax_rate": tax_rate}
 
-    def update_item_quantity(self, id: str, change_to_quantity: int) -> None:
+    def update_item_quantity(self, id: int, change_to_quantity: int) -> None:
         """
         Updates the quantity of an item in the user's cart.
 
@@ -86,7 +86,7 @@ class UserSession:
         else:
             self.cart[id]["quantity"] += change_to_quantity
 
-    def remove_item(self, id: str) -> None:
+    def remove_item(self, id: int) -> None:
         """
         Removes an item from the user's cart.
 
