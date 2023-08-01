@@ -43,7 +43,7 @@ def login_page():
     return render_template('login.html')
 
 
-@app.route('/home', methods=['POST'])
+@app.route('/home', methods=['POST', 'GET'])
 def login():
     """
     Renders the home page when the user is at the `/home` endpoint with a POST request.
@@ -58,14 +58,19 @@ def login():
         - sessions: adds a new session to the sessions object
 
     """
-    username = request.form['username']
-    password = request.form['password']
-    if login_pipeline(username, password):
-        sessions.add_new_session(username, db)
-        return render_template('home.html', products=products, sessions=sessions)
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if login_pipeline(username, password):
+            sessions.add_new_session(username, db)
+            return render_template('home.html', products=products, sessions=sessions)
+        else:
+            print(f"Incorrect username ({username}) or password ({password}).")
+            return render_template('index.html')
     else:
-        print(f"Incorrect username ({username}) or password ({password}).")
-        return render_template('index.html')
+        return render_template('home.html', products=products, sessions=sessions)
+
+    
 
 
 @app.route('/register')
@@ -128,7 +133,7 @@ def checkout():
         print(f"item ID: {item['id']}")
         if request.form[str(item['id'])] > '0':
             count = request.form[str(item['id'])]
-            order[item['item_name']] = count
+            order[item['item_name']] = [int(count),float(item['price'])]
             user_session.add_new_item(
                 item['id'], item['item_name'], item['price'], count)
 

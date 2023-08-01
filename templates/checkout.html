@@ -7,13 +7,47 @@
         <h3>Your Order</h3>
         <hr>
         <div class="row">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Amount Purchased</th>
+                        <th>Unit Price</th>
+                        <th>Price per Item Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item, data in order.items() %}
+                    <tr>
+                        <td>{{ item }}</td>
+                        <td>{{ data[0] }}</td>
+                        <td>${{ data[1] }}</td>
+                        <td>${{ data[0] * data[1] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p>Total Cost: ${{ total_cost }}</p>
+            <a href="/home" class="btn btn-primary custom-button" id="home_button">Return to home</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- old code -> completly reworked
+<div class="row" id="products_page">
+    <div class="col-md-12">
+        <h3>Your Order</h3>
+        <hr>
+        <div class="row">
             <ul>
-                {% for item_name, quantity in order.items() %}
-                <li>{{ quantity }} x {{ item_name }}</li>
+                {% for item in order.items() %}
+                <li>{{ item[0] }} x {{ item[1][1] }}</li>
                 {% endfor %}
             </ul>
             <p>${{ total_cost }} </p>
         </div>
     </div>
 </div>
+//-->
 {% endblock %}
