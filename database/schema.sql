@@ -22,6 +22,8 @@ CREATE TABLE sales (
     username VARCHAR(255) NOT NULL,
     item_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
+    sale_rating INTEGER,
+    sale_review TEXT,
     sale_date DATETIME NOT NULL,
     cost DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (username) REFERENCES users(username),

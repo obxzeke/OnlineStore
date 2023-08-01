@@ -7,7 +7,12 @@
         <h3>Your Order</h3>
         <hr>
         <div class="row">
-            <p>{{ total_cost }} </p>
+            <ul>
+                {% for item_name, quantity in order.items() %}
+                <li>{{ quantity }} x {{ item_name }}</li>
+                {% endfor %}
+            </ul>
+            <p>${{ total_cost }} </p>
         </div>
     </div>
 </div>

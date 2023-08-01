@@ -10,7 +10,7 @@ HOST, PORT = 'localhost', 8080
 global username, products, db, sessions
 username = 'default'
 db = Database('database/store_records.db')
-products = db.get_full_inventory()
+products = db.get_inventory_with_reviews()
 sessions = Sessions()
 sessions.add_new_session(username, db)
 

@@ -19,11 +19,17 @@ VALUES ('Bananas', 'A long curved fruit which grows in clusters and has soft pul
 INSERT into `inventory` (`item_name`, `info`, `price`, `stock`, `image_url`, `category`)
 VALUES ('Mangos', 'The best fruit on the planet.', 4.00, 100, 'static/images/mango.jpeg', 'Fruit');
 
-INSERT into `sales` (`transaction_id`, `username`, `item_id`, `quantity`, `sale_date`, `cost`)
-VALUES ('1', 'aturing', '1', 10, '2022-12-21 7:30:30', 5.50);
+INSERT into `inventory` (`item_name`, `info`, `price`, `stock`, `image_url`, `category`)
+VALUES ('Oranges', "Hey, they're orange", 4.00, 100, 'static/images/orange.jpeg', 'Fruit');
 
-INSERT into `sales` (`transaction_id`, `username`, `item_id`, `quantity`, `sale_date`, `cost`)
-VALUES ('2', 'dritchie', '2', 10, '2022-12-21 7:30:30', 5.50);
+INSERT into `inventory` (`item_name`, `info`, `price`, `stock`, `image_url`, `category`)
+VALUES ('Acai', "It starts with A", 4.00, 100, 'static/images/acai.jpg', 'Fruit');
 
-INSERT into `sales` (`transaction_id`, `username`, `item_id`, `quantity`, `sale_date`, `cost`)
-VALUES ('3', 'llamport', '3', 10, '2022-12-21 7:30:30', 5.50);
+INSERT into `sales` (`transaction_id`, `username`, `item_id`, `quantity`, `sale_date`, 'sale_rating', 'sale_review', `cost`)
+VALUES ('1', 'aturing', '1', 10, '2022-12-21 7:30:30',  3, 'mid at best', 5.50);
+
+INSERT into `sales` (`transaction_id`, `username`, `item_id`, `quantity`, `sale_date`, 'sale_rating', 'sale_review', `cost`)
+VALUES ('2', 'dritchie', '2', 10, '2022-12-21 7:30:30', 5, 'its like it was made for my hand', 5.50);
+
+INSERT into `sales` (`transaction_id`, `username`, `item_id`, `quantity`, `sale_date`, 'sale_rating', 'sale_review', `cost`)
+VALUES ('3', 'llamport', '3', 10, '2022-12-21 7:30:30', 1, 'the worst fruit on the planet', 5.50);

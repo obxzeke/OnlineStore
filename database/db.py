@@ -43,7 +43,45 @@ class Database:
             "INSERT INTO inventory (item_name, price, info) VALUES (?, ?, ?)", (item_name, price, info))
         self.connection.commit()
 
+    # ------ table merging functions ------
+
+    def get_inventory_with_reviews(self):
+        self.cursor.execute("""
+            SELECT 
+                inventory.id, 
+                inventory.item_name, 
+                inventory.info, 
+                inventory.price, 
+                inventory.stock, 
+                inventory.image_url, 
+                inventory.category,
+                AVG(sales.sale_rating) as average_rating,
+                (
+                    SELECT sale_review 
+                    FROM sales as s2 
+                    WHERE s2.item_id = inventory.id 
+                    ORDER BY s2.sale_date DESC 
+                    LIMIT 1
+                ) as recent_review
+            FROM 
+                inventory 
+            LEFT JOIN 
+                sales ON inventory.id = sales.item_id
+            GROUP BY 
+                inventory.id, 
+                inventory.item_name, 
+                inventory.info, 
+                inventory.price, 
+                inventory.stock, 
+                inventory.image_url, 
+                inventory.category
+            ORDER BY 
+                inventory.item_name                
+        """)
+        return self.cursor.fetchall()
+    
     # ------ Getter methods ------
+
 
     def get_full_inventory(self):
         """
@@ -623,6 +661,67 @@ class Database:
         self.cursor.execute(
             "SELECT * FROM sales WHERE cost BETWEEN ? AND ?", (start_cost, end_cost))
         return self.cursor.fetchall()
+    
+    # ------ new getters for project ------
+
+    def get_sales_rating_by_item_id(self, item_id: int):
+        """
+        Gets the sales ratings for a specific item from the database.
+
+        args:
+            - item_id: The id of the item whose sales ratings to get.
+
+        returns:
+            - A list of sales ratings for the item with the given id.
+        """
+        self.cursor.execute(
+            "SELECT AVG(sale_rating) FROM sales WHERE item_id = ?", (item_id,))
+        return self.cursor.fetchone()
+
+
+    def get_sales_reviews_by_item_id(self, item_id: int):
+        """
+        Gets the sales reviews for a specific item from the database.
+
+        args:
+            - item_id: The id of the item whose sales reviews to get.
+
+        returns:
+            - A list of sales reviews for the item with the given id.
+        """
+        self.cursor.execute(
+            "SELECT sale_review FROM sales WHERE item_id = ?", (item_id,))
+        return self.cursor.fetchall()
+
+
+    def get_sale_rating_by_sale_id(self, sale_id: int):
+        """
+        Gets the sale rating for a sale from the database.
+
+        args:
+            - sale_id: The id of the sale whose sale rating to get.
+
+        returns:
+            - The sale rating for the sale with the given id.
+        """
+        self.cursor.execute(
+            "SELECT sale_rating FROM sales WHERE sale_id = ?", (sale_id,))
+        return self.cursor.fetchone()
+
+
+    def get_sale_review_by_sale_id(self, sale_id: int):
+        """
+        Gets the sale review for a sale from the database.
+
+        args:
+            - sale_id: The id of the sale whose sale review to get.
+
+        returns:
+            - The sale review for the sale with the given id.
+        """
+        self.cursor.execute(
+            "SELECT sale_review FROM sales WHERE sale_id = ?", (sale_id,))
+        return self.cursor.fetchone()
 
     # ------ Setter methods ------
 
@@ -718,4 +817,37 @@ class Database:
 
         self.cursor.execute(
             "UPDATE sales SET cost = ? WHERE id = ?", (new_cost, sale_id))
+        self.connection.commit()
+
+    # ------ new setters for project ------
+
+    def set_sale_rating(self, sale_id: int, new_rating: float):
+        """
+        Updates the rating of a sale in the database.
+
+        args:
+            - sale_id: The id of the sale to update.
+            - new_rating: The new rating of the sale.
+
+        returns:
+            - None
+        """
+        self.cursor.execute(
+            "UPDATE sales SET sale_rating = ? WHERE sale_id = ?", (new_rating, sale_id))
+        self.connection.commit()
+
+
+    def set_sale_review(self, sale_id: int, new_review: str):
+        """
+        Updates the review of a sale in the database.
+
+        args:
+            - sale_id: The id of the sale to update.
+            - new_review: The new review of the sale.
+
+        returns:
+            - None
+        """
+        self.cursor.execute(
+            "UPDATE sales SET sale_review = ? WHERE sale_id = ?", (new_review, sale_id))
         self.connection.commit()

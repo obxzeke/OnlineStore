@@ -45,7 +45,7 @@
     width: 302px;
     background-color: #cac2c2;
     border: 1px solid rgb(178, 178, 178);
-    height: 500px;
+    height: 600px;
 }
 
 .product_card-img {
@@ -73,6 +73,16 @@
 
 .product_card-price {
     text-align: center;
+    font-size: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.product_card-rating {
+    text-align: center;
+    color: gold;
     font-size: 15px;
     margin-top: 10px;
     margin-bottom: 10px;
