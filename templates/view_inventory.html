@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="row" id="see_user_data">
+    <div class="col-md-12">
+        <h3>User Data</h3>
+        <hr>
+        <div class="row">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item ID</th>
+                        <th>Name</th>
+                        <th>Unit Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in inventory %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.item_name }}</td>
+                        <td>${{ item.price }}</td>
+                        <td>{{ item.stock }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3>Update Inventory</h3>
+            
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

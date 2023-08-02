@@ -20,26 +20,19 @@ class "UserSession" as core.session.UserSession #aliceblue {
   submit_cart() -> None
   update_item_quantity(id: int, change_to_quantity: int) -> None
   update_total_cost() -> None
-  view_purchase_history() -> Database
   get_user_password() -> str
-  reset_user_password(old_password: str, user_answer: str, new_password: str) -> bool
+  reset_user_password(old_password: str, new_password: str) -> bool
   set_user_password(new_password) -> None
   change_username(self, new_username: str, password) -> bool
-  change_email(new_email: str) -> None
-  new_review(rating: int, sale_id: int, description: str) -> None
-  view_rating(sale_id: int) -> float
-  view_reviews(sale_id: int) -> Database
 }
 
 class "AdminSession" as core.session.AdminSession #aliceblue {
   db : Database
   username: str
   date: datetime, NoneType
-  add_new_product(id: int, name: str, price: int, quantity: int, discount: float, tax_rate: float) -> None
-  remove_product(id: int) -> None
+  add_new_product(self, name: str, price: int, info: str) -> None  remove_product(id: int) -> None
   update_product_inventory(id: int, inventory: int) -> None
   view_user_list() -> Database
-  view_user_infomration(user_id: int) -> Database
   sales_report(start_date: datetime, end_date: datetime) -> Database
 }
 

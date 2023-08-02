@@ -8,6 +8,7 @@ class "Database" as database.db.Database #aliceblue {
   get_all_user_information()
   get_cost_by_sale_id(sale_id: int)
   get_email_by_username(username: str)
+  is_admin_by_username(username: str)
   get_first_name_by_username(username: str)
   get_full_inventory()
   get_full_sale_by_id(sale_id: int)

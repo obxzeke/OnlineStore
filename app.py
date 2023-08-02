@@ -185,5 +185,45 @@ def review_submission(sale_id):
 
     return render_template('review_success.html')
 
+@app.route('/admin', methods=['GET'])
+def admin_home_page():
+    """
+    Renders the admin page
+
+    args:
+        - None
+
+    returns:
+        - None
+    """
+    return render_template('admin.html')
+
+@app.route('/view_inventory', methods=['GET'])
+def view_inventory():
+    """
+    Renders the inventory page
+
+        args:
+        - None
+
+        returns:
+        - None
+    """
+    inventory = db.get_full_inventory()
+    return render_template('view_inventory.html', inventory = inventory)
+
+@app.route('/see_user_data', methods=['GET'])
+def see_user_data():
+    """
+    Renders the user data page
+
+        args:
+        - None
+
+        returns:
+        - None
+    """
+    return render_template('see_user_data.html')
+
 if __name__ == '__main__':
     app.run(debug=True, host=HOST, port=PORT)

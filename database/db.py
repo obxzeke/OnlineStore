@@ -105,6 +105,20 @@ class Database:
     
     # ------ Getter methods ------
 
+    def is_admin_by_username(self, username: str) -> bool:
+        """
+        Sees if a user is an admin
+
+        args:
+            - username: The username of the user
+
+        returns:
+            - True if admin, false if regular user
+        """
+        self.cursor.execute(
+            "SELECT is_admin FROM users WHERE id = ?", (username,))
+        result = self.cursor.fetchone()
+
 
     def get_full_inventory(self):
         """
