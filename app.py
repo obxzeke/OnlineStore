@@ -27,6 +27,7 @@ def index_page():
     returns:
         - None
     """
+    products = db.get_inventory_with_reviews()
     return render_template('index.html', username=username, products=products, sessions=sessions)
 
 
@@ -59,6 +60,7 @@ def login():
         - sessions: adds a new session to the sessions object
 
     """
+    products = db.get_inventory_with_reviews()
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -67,11 +69,11 @@ def login():
             return render_template('home.html', products=products, sessions=sessions)
         else:
             print(f"Incorrect username ({username}) or password ({password}).")
-            return render_template('index.html')
+            return render_template('index.html', products=products, sessions=sessions)
     else:
         return render_template('home.html', products=products, sessions=sessions)
 
-    
+   
 
 
 @app.route('/register')
@@ -137,10 +139,11 @@ def checkout():
             order[item['item_name']] = [int(count),float(item['price'])]
             user_session.add_new_item(
                 item['id'], item['item_name'], item['price'], count)
+        db.insert_new_sale(0, username, item['id'], int(count), user_session.date, float(item['price']))
 
     user_session.submit_cart()
 
-    return render_template('checkout.html', order=order, sessions=sessions, total_cost=user_session.total_cost)
+    return render_template('checkout.html', order=order, sessions=sessions, total_cost=user_session.total_cost,)
 
 @app.route('/reviews', methods=['GET'])
 def reviews_page():
@@ -156,6 +159,31 @@ def reviews_page():
     sales = db.get_sales_by_username(username)
     return render_template('reviews.html', username=username, products=products, sessions=sessions, review_info=review_info, sales=sales)
 
+@app.route('/submit_review/<int:sale_id>', methods=['POST'])
+def review_submission(sale_id):
+    """
+    Handles the review submission when the user submits the review form.
+
+    args:
+        - item_id (int): The ID of the item for which the review is being submitted.
+
+    returns:
+        - str: A response message indicating the success or failure of the review submission.
+    """
+    rating = int(request.form.get('rating'))
+    review_text = request.form.get('review')
+
+    print(rating)
+    print('review text"')
+    print(review_text)
+
+    db.set_sale_rating(sale_id, rating)
+    db.set_sale_review(sale_id, review_text)
+
+    print(db.get_sale_rating_by_sale_id(sale_id))
+    print(db.get_sale_review_by_sale_id(sale_id))
+
+    return render_template('review_success.html')
 
 if __name__ == '__main__':
     app.run(debug=True, host=HOST, port=PORT)

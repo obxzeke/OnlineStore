@@ -23,8 +23,32 @@
             {% endfor %}
         </div>
         <h3>Your reviews</h3>
+        {% for sale in sales %}
+            <div class="review">
+                <div class="product-info">
+                    <img src="{{ sale.image_url }}" class="product-image" alt="{{ sale.item_name }}">
+                    <h4 class="product-name">{{ sale.item_name }}</h4>
+                    <p class="product-category">{{ sale.category }}</p>
+                </div>
+                <div class="review-details">
+                    <p class="review-rating">Rating: {{ sale.sale_rating }} ★</p>
+                    <p class="review-text">Review: {{ sale.sale_review }}</p>
+                    <p class="review-date">Purchase Date: {{ sale.sale_date }}</p>
+                <div>
+                </div class="review-inputs">
+                    <form method="post" action="/submit_review/{{ sale.sale_id }}">
+                        {% if sale.rating == Null %}
+                        <label for="rating{{ sale.item_id }}">Your Rating:</label>
+                        <input type="number" name="rating" id="rating{{ sale.item_id }}" min="1" max="5" required>
+                        <label for="review{{ sale.item_id }}">Your Review:</label>
+                        <textarea name="review" id="review{{ sale.item_id }}" rows="3" required></textarea>
+                        <button type="submit">Submit Review</button>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
         <div>
-        </div>
     </div>
 </div>
 

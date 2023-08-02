@@ -23,7 +23,7 @@ class UserSession:
     def __init__(self, username: str, db: Database):
         self.username = username
         self.total_cost = 0
-        self.date = None
+        self.date = datetime.now()
         self.db = db
         self.cart = self.empty_cart()
 

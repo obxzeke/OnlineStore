@@ -637,8 +637,12 @@ class Database:
         returns:
             - The sales for the user with the given username.
         """
-        self.cursor.execute(
-            "SELECT * FROM sales WHERE username = ?", (username,))
+        self.cursor.execute("""
+            SELECT s.*, i.item_name, i.image_url
+            FROM sales AS s
+            JOIN inventory AS i ON s.item_id = i.id
+            WHERE s.username = ?
+            """, (username,))
         return self.cursor.fetchall()
 
     def get_sales_by_item_id(self, item_id: int):
@@ -886,6 +890,9 @@ class Database:
         returns:
             - None
         """
+        print('new rev:' )
+        print(new_review)
+        
         self.cursor.execute(
             "UPDATE sales SET sale_review = ? WHERE sale_id = ?", (new_review, sale_id))
         self.connection.commit()
