@@ -68,6 +68,32 @@ def update_passwords(username: str, key: str, salt: str):
         if not found_flag:
             file.write(f"\n{username}:{salt}:{key}")
 
+def update_username(old_username: str, new_username: str, password: str):
+    """
+    Updates the passwords.txt file with a new username with exsisting password
+
+    args:
+        - username: A string of the username to store.
+        - key: A string of the hashed password to store.
+        - salt: A string of the salt to store.
+
+    returns:
+        - None
+
+    modifies:
+        - passwords.txt: Updates an existing username
+    """
+    salt, key = hash_password(password)
+    
+    with open("authentication/passwords.txt", "r") as file:
+        lines = file.readlines()
+    with open("authentication/passwords.txt", "w") as file:
+        for line in lines:
+            if line.split(":")[0] == old_username:
+                file.write(f"{new_username}:{salt}:{key}")
+            else:
+                file.write(line)
+
 
 def check_password(password: str, salt: str, key: str) -> bool:
     """

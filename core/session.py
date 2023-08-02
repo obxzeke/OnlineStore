@@ -1,6 +1,7 @@
 from core.utils import calculate_total_cost
 from datetime import datetime
 from database.db import Database
+from authentication.auth_tools import *
 
 
 class UserSession:
@@ -113,6 +114,49 @@ class UserSession:
         """
         self.update_total_cost()
         self.date = datetime.now()
+
+    #def view_purchase_history(self) -> Database:
+        
+    def get_user_password(self) -> str:
+        Database.get_password_hash_by_username(self.username)
+
+    def reset_user_password(self, old_password: str, user_answer: str, new_password: str) -> bool:
+        if check_password(old_password):
+            self.set_user_password(new_password)
+            return True
+        else:
+            return False
+
+    def set_user_password(self, new_password) -> None:
+        
+        hashed_password_tuple = hash_password(new_password)
+        update_passwords(self.username, hashed_password_tuple[1], hashed_password_tuple[0])
+
+        seperator = ""
+        hashed_password = seperator.join(hashed_password_tuple)
+        Database.set_password_hash(self.username, hashed_password)
+
+    def change_username(self, new_username: str, password) -> bool:
+        
+        if login_pipeline(self.username, password):
+            if username_exists(new_username) == False:
+                Database.set_username(new_username)
+                update_username(self.username, new_username, password)
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    def change_email(self, new_email: str) -> None:
+        Database.set_email(new_email)
+
+    #def new_review(self, rating: int, sale_id: int, description: str) -> None:  
+
+    #def view_rating(self, sale_id: int) -> float:
+
+    #def view_reviews(self, sale_id: int) -> Database:
+
 
 
 class Sessions:
