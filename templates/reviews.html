@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="row" id="products_page">
+    <div class="col-md-12">
+        <h3>Product Reviews</h3>
+        <div class="review-list">
+            {% for review in review_info %}
+            <div class="review">
+                <div class="product-info">
+                    <img src="{{ review.image_url }}" class="product-image" alt="{{ review.item_name }}">
+                    <h4 class="product-name">{{ review.item_name }}</h4>
+                    <p class="product-category">{{ review.category }}</p>
+                </div>
+                <div class="review-details">
+                    <p class="review-rating">Rating: {{ review.sale_rating }} ★</p>
+                    <p class="review-username">Username: {{ review.reviewer_username }}</p>
+                    <p class="review-text">Review: {{ review.sale_review }}</p>
+                    <p class="review-date">Review Date: {{ review.sale_date }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <h3>Your reviews</h3>
+        <div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

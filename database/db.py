@@ -80,6 +80,29 @@ class Database:
         """)
         return self.cursor.fetchall()
     
+    def get_reviews_information(self):
+        self.cursor.execute("""
+            SELECT 
+                i.id AS product_id,
+                i.item_name,
+                i.info,
+                i.price,
+                i.stock,
+                i.image_url,
+                i.category,
+                s.sale_rating,
+                s.sale_review,
+                s.sale_date,
+                s.username AS reviewer_username
+            FROM 
+                inventory AS i
+            INNER JOIN
+                sales AS s ON i.id = s.item_id
+            WHERE
+                s.sale_review IS NOT NULL;
+        """)
+        return self.cursor.fetchall()
+    
     # ------ Getter methods ------
 
 
@@ -406,6 +429,21 @@ class Database:
         """
         self.cursor.execute(
             "UPDATE users SET email = ? WHERE username = ?", (new_email, username))
+        self.connection.commit()
+
+    def set_username(self, username: str, new_username: str):
+        """
+        Updates the username of a user in the database.
+
+        args:
+            - username: The username of the user to update.
+            - new_username: The new username of the user.
+
+        returns:
+            - None
+        """
+        self.cursor.execute(
+            "UPDATE users SET username = ? WHERE username = ?", (new_username, username))
         self.connection.commit()
 
     def set_first_name(self, username: str, new_first_name: str):

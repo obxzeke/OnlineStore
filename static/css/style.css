@@ -45,7 +45,7 @@
     width: 302px;
     background-color: #cac2c2;
     border: 1px solid rgb(178, 178, 178);
-    height: 600px;
+    height: 650px;
 }
 
 .product_card-img {
@@ -68,7 +68,16 @@
     margin-top: 10px;
     margin-bottom: 10px;
     font-style: italic;
-    height: 60px;
+    overflow: hidden;
+}
+
+.product_card-review {
+    text-align: center;
+    font-size: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-style: italic;
+    overflow: hidden;
 }
 
 .product_card-price {
@@ -177,4 +186,68 @@ th {
 
 .custom-button:hover {
     background-color: #666;
+}
+
+.most_recent_review {
+    margin-top: 10px;
+}
+
+.review-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.review {
+    width: 300px;
+    margin: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+}
+
+.product-info {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+}
+
+.product-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.product-category {
+    font-size: 16px;
+    margin-top: 5px;
+    color: #666;
+}
+
+.review-details {
+    flex: 2;
+}
+
+.review-rating {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.review-username {
+    font-size: 16px;
+    margin-top: 5px;
+    color: #666;
+}
+
+.review-text {
+    margin-top: 10px;
+}
+
+.review-date {
+    margin-top: 5px;
+    font-style: italic;
+    color: #888;
 }

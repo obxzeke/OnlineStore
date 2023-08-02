@@ -11,6 +11,7 @@ global username, products, db, sessions
 username = 'default'
 db = Database('database/store_records.db')
 products = db.get_inventory_with_reviews()
+review_info = db.get_reviews_information()
 sessions = Sessions()
 sessions.add_new_session(username, db)
 
@@ -140,6 +141,20 @@ def checkout():
     user_session.submit_cart()
 
     return render_template('checkout.html', order=order, sessions=sessions, total_cost=user_session.total_cost)
+
+@app.route('/reviews', methods=['GET'])
+def reviews_page():
+    """
+    Renders the reviews page
+
+    args:
+        - None
+
+    returns:
+        - None
+    """
+    sales = db.get_sales_by_username(username)
+    return render_template('reviews.html', username=username, products=products, sessions=sessions, review_info=review_info, sales=sales)
 
 
 if __name__ == '__main__':
