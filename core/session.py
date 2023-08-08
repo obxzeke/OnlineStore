@@ -2,7 +2,7 @@ from core.utils import calculate_total_cost
 from datetime import datetime
 from database.db import Database
 from authentication.auth_tools import *
-
+import sqlite3 as sdb
 
 class UserSession:
     """
@@ -196,7 +196,23 @@ class Sessions:
 
     def __init__(self):
         self.sessions = {}
+        
+    def create_db_file():
+        # Read the .sql file
+        with open("database/schema.sql", 'r') as file:
+            sql_commands = file.read()
 
+        # Connect to the SQLite database and create a cursor
+        conn = sdb.connect("database/store_records.db")
+        cursor = conn.cursor()
+
+        # Execute the SQL commands
+        cursor.executescript(sql_commands)
+
+        # Commit the changes and close the connection
+        conn.commit()
+        conn.close()
+        
     def add_new_session(self, username: str, db: Database) -> None:
         """
         Adds a new user session to the collection of sessions.
