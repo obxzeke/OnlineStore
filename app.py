@@ -199,6 +199,32 @@ def admin_home_page():
     """
     return render_template('admin.html')
 
+@app.route('/settings', methods=['GET'])
+def settings_page():
+    """
+    Renders the settings page
+
+    args:
+        - None
+
+    returns:
+        - None
+    """
+    return render_template('settings.html')
+
+@app.route('/change_password', methods=['GET'])
+def change_password_page():
+    """
+    Renders the change password page
+
+    args:
+        - None
+
+    returns:
+        - None
+    """
+    return render_template('change_password.html')
+
 @app.route('/view_inventory', methods=['GET'])
 def view_inventory():
     """
