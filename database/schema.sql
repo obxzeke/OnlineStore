@@ -14,7 +14,7 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
-    is_admin BOOLEAN DEFAULT FALSE
+    is_admin INTEGER DEFAULT 0
 );
 
 CREATE TABLE sales (

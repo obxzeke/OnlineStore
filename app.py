@@ -2,7 +2,7 @@
 
 from authentication.auth_tools import login_pipeline, update_passwords, hash_password
 from database.db import Database
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request
 from core.session import Sessions
 
 app = Flask(__name__)
@@ -65,15 +65,14 @@ def login():
         username = request.form['username']
         password = request.form['password']
         if login_pipeline(username, password):
+            is_admin = db.is_admin_by_username(username)
             sessions.add_new_session(username, db)
-            return render_template('home.html', products=products, sessions=sessions)
+            return render_template('home.html', products=products, sessions=sessions, is_admin = is_admin)
         else:
             print(f"Incorrect username ({username}) or password ({password}).")
             return render_template('index.html', products=products, sessions=sessions)
     else:
-        return render_template('home.html', products=products, sessions=sessions)
-
-   
+        return render_template('home.html', products=products, sessions=sessions, is_admin = is_admin)
 
 
 @app.route('/register')
@@ -235,7 +234,24 @@ def view_inventory():
 
         returns:
         - None
+
+        modifies:
+        - inventory: admin can update stock and price
     """
+
+    if request.method == 'POST':
+        try:
+            product_id = int(request.form['product_id'])
+            price = float(request.form['price'])
+            quantity = int(request.form['quantity'])
+            if db.product_exists(product_id):
+                db.set_item_price(product_id, price)
+                db.set_item_stock(product_id, quantity)
+            else:
+                raise ValueError("Invalid product id")
+        except (ValueError, KeyError):
+            return redirect('/view_inventory?invalid=true')
+
     inventory = db.get_full_inventory()
     return render_template('view_inventory.html', inventory = inventory)
 
@@ -250,7 +266,8 @@ def see_user_data():
         returns:
         - None
     """
-    return render_template('see_user_data.html')
+    users = db.get_all_user_information()
+    return render_template('see_user_data.html', users=users)
 
 if __name__ == '__main__':
     app.run(debug=True, host=HOST, port=PORT)
