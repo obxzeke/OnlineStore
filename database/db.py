@@ -116,8 +116,29 @@ class Database:
             - True if admin, false if regular user
         """
         self.cursor.execute(
-            "SELECT is_admin FROM users WHERE id = ?", (username,))
+            "SELECT is_admin FROM users WHERE username = ?", (username,))
         result = self.cursor.fetchone()
+        if result is not None and result["is_admin"] == 1:
+            return True
+        else:
+            return False
+        
+    def product_exists(self, product_id) -> bool:
+        """
+        Sees if a product exists
+
+        args:
+            - product_id: the id of the product
+
+        returns:
+            - True if exists, false if it doesn't
+        """
+        ids = self.get_all_item_ids()
+        
+        for id in ids:
+            if product_id == id['id']:
+                return True
+        return False
 
 
     def get_full_inventory(self):
