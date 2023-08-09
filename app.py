@@ -132,6 +132,7 @@ def checkout():
     """
     order = {}
     user_session = sessions.get_session(username)
+    
     for item in products:
         print(f"item ID: {item['id']}")
         if request.form[str(item['id'])] > '0':
@@ -139,7 +140,7 @@ def checkout():
             order[item['item_name']] = [int(count),float(item['price'])]
             user_session.add_new_item(
                 item['id'], item['item_name'], item['price'], count)
-        db.insert_new_sale(0, username, item['id'], int(count), user_session.date, float(item['price']))
+            db.insert_new_sale(0, username, item['id'], int(count), user_session.date, float(item['price']))
 
     user_session.submit_cart()
 

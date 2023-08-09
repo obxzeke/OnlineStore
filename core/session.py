@@ -197,7 +197,7 @@ class Sessions:
     def __init__(self):
         self.sessions = {}
         
-    def create_db_file():
+    def create_db_file(self):
         # Read the .sql file
         with open("database/schema.sql", 'r') as file:
             sql_commands = file.read()
@@ -212,6 +212,24 @@ class Sessions:
         # Commit the changes and close the connection
         conn.commit()
         conn.close()
+        
+        
+        #----pt 2
+        
+    
+        # Connect to the SQLite database (.db file)
+        db_connection = sdb.connect('database/store_records.db')
+        cursor = db_connection.cursor()
+
+        # Read and execute SQL statements from the .sql file
+        with open('database/starting_data.sql', 'r') as sql_file:
+            sql_statements = sql_file.read()
+
+        cursor.executescript(sql_statements)
+
+        # Commit changes and close the connection
+        db_connection.commit()
+        db_connection.close()
         
     def add_new_session(self, username: str, db: Database) -> None:
         """
