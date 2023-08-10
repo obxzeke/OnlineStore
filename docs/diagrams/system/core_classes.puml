@@ -24,14 +24,4 @@ class "UserSession" as core.session.UserSession #aliceblue {
   set_user_password(new_password) -> None
 }
 
-class "AdminSession" as core.session.AdminSession #aliceblue {
-  db : Database
-  username: str
-  date: datetime, NoneType
-  add_new_product(self, name: str, price: int, info: str) -> None  remove_product(id: int) -> None
-  update_product_inventory(id: int, inventory: int) -> None
-  view_user_list() -> Database
-  sales_report(start_date: datetime, end_date: datetime) -> Database
-}
-
 @enduml
