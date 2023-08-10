@@ -86,3 +86,29 @@ def test_check_connection_threaded(db: Database = None) -> tuple:
         return False, error
     else:
         return True, "Connection is not single threaded."
+    
+def test_check_product_rating_review(db: Database = None) -> tuple:
+    """
+    Tests that the product ratings are accurate and valid.
+
+    args:
+        - db: an sqlite3 database object (optional)
+
+    returns:
+        - error_report: a tuple containing a boolean and a string, 
+          where the boolean is True if the test passed and False if it failed, 
+          and the string is the error report.
+    """
+    db = Database("database/store_records.db") if db is None else db
+    db.insert_new_sale(9999999999999999,"test",998,100,"999-10-10", 100.0)
+    sales = db.get_sales_by_transaction_id(9999999999999999)
+    sale_id = sales[0]['sale_id']
+    db.set_sale_review(sale_id,'test review')
+    db.set_sale_rating(sale_id, 5)
+    sale_rating = db.get_sale_rating_by_sale_id(sale_id)
+    sale_review = db.get_sale_review_by_sale_id(sale_id)
+    if sale_rating != {'sale_rating': 5} or sale_review != {'sale_review': 'test review'}:
+        error = f"Error in test_check_product_rating_review: Expected rating and review to be {5} and 'test review' respectively.\n  - Actual rating: {sale_rating}\n  - Actual review: {sale_review}"
+        return False, error
+    else:
+        return True, "review and rating set correctly"

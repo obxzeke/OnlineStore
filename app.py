@@ -11,7 +11,6 @@ global username, products, db, sessions
 username = 'default'
 db = Database('database/store_records.db')
 products = db.get_inventory_with_reviews()
-review_info = db.get_reviews_information()
 sessions = Sessions()
 sessions.add_new_session(username, db)
 
@@ -141,6 +140,7 @@ def checkout():
                 item['id'], item['item_name'], item['price'], count)
             db.insert_new_sale(0, username, item['id'], int(count), user_session.date, float(item['price']))
 
+    user_session.update_total_cost()
     user_session.submit_cart()
 
     return render_template('checkout.html', order=order, sessions=sessions, total_cost=user_session.total_cost,)
@@ -156,6 +156,9 @@ def reviews_page():
     returns:
         - None
     """
+
+    review_info = db.get_reviews_information()
+
     sales = db.get_sales_by_username(username)
     return render_template('reviews.html', username=username, products=products, sessions=sessions, review_info=review_info, sales=sales)
 
@@ -173,15 +176,8 @@ def review_submission(sale_id):
     rating = int(request.form.get('rating'))
     review_text = request.form.get('review')
 
-    print(rating)
-    print('review text"')
-    print(review_text)
-
     db.set_sale_rating(sale_id, rating)
     db.set_sale_review(sale_id, review_text)
-
-    print(db.get_sale_rating_by_sale_id(sale_id))
-    print(db.get_sale_review_by_sale_id(sale_id))
 
     return render_template('review_success.html')
 

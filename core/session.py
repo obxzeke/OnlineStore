@@ -22,7 +22,7 @@ class UserSession:
 
     def __init__(self, username: str, db: Database):
         self.username = username
-        self.total_cost = 0
+        self.total_cost = 0.0
         self.date = datetime.now()
         self.db = db
         self.cart = self.empty_cart()
@@ -114,6 +114,18 @@ class UserSession:
         """
         self.update_total_cost()
         self.date = datetime.now()
+
+    def get_cart(self) ->dict:
+        """
+        Returns currents sessions cart
+        
+        args:
+            -None
+        
+        returns
+            -dict of current cart
+        """
+        return self.cart
         
     def get_user_password(self) -> str:
         """
