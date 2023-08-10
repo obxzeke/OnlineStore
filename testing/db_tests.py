@@ -112,3 +112,27 @@ def test_check_product_rating_review(db: Database = None) -> tuple:
         return False, error
     else:
         return True, "review and rating set correctly"
+    
+def test_is_admin_by_username(db: Database = None) -> tuple:
+    """
+    Tests that if a user is an admin will return true
+
+    args:
+        - db: an sqlite3 database object (optional)
+
+    returns:
+        - error_report: a tuple containing a boolean and a string, 
+          where the boolean is True if the test passed and False if it failed, 
+          and the string is the error report.
+    """
+    db = Database("database/store_records.db") if db is None else db
+    db.insert_user("test1", "dafasf", "test@test.com", "test", "test", 1)
+
+    expected_result = True
+
+    actual_result = db.is_admin_by_username("test1")
+
+    if expected_result != actual_result:
+        error = f"Error in test_is_admin_by_username, Expected: {expected_result}, Actual: {actual_result}"
+        return False, error
+    return True, "is_admin returns correctly"

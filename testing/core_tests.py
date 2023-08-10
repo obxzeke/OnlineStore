@@ -1,5 +1,6 @@
 from core.session import Sessions, UserSession
 from database.db import Database
+from authentication.auth_tools import hash_password, update_passwords, login_pipeline
 
 
 def test_init_sessions() -> tuple:
@@ -218,6 +219,79 @@ def test_session_cart_price() -> tuple:
         return False, error
     
     return True, "total cost was calculated succesfully."
+
+def test_reset_user_password():
+    """
+    Tests if resetting a password works
+
+    args:
+        None
+
+    returns:
+        - error_report: a tuple containing a boolean and a string, 
+          where the boolean is True if the test passed and False if it failed, 
+          and the string provides a description or error report.
+    """
+    db = Database("database/store_records.db")
+    sessions = Sessions()
+    sessions.add_new_session("test", db)
+    sessions = sessions.get_session("test")
+
+    old_password = "test"
+    new_password = "updatedPassword"
+
+    new_user_session = UserSession("test", db)
+    if new_user_session.reset_user_password(old_password, new_password):
+        error = "password didn't reset"
+        return False, error
+
+    new_password_hashed = hash_password(new_password)
+
+    updated_password = db.get_password_hash_by_username("test")
+    updated_password = updated_password["password_hash"]
+    if login_pipeline("test", new_password):
+        error = f"Error: Expected new password to be {new_password_hashed[1]} but was {updated_password}"
+        return False, error
+    return True, "Password was correctly changed"
+
+
+def test_set_user_password():
+    """
+    Tests if changing a password works
+
+    args:
+        None
+
+    returns:
+        - error_report: a tuple containing a boolean and a string, 
+          where the boolean is True if the test passed and False if it failed, 
+          and the string provides a description or error report.
+    """
+    db = Database("database/store_records.db")
+    sessions = Sessions()
+    sessions.add_new_session("test", db)
+    sessions = sessions.get_session("test")
+
+    new_password = "password"
+
+    new_user_session = UserSession("test", db)
+
+    new_user_session.set_user_password(new_password)
+
+    actual_password_hashed = db.get_password_hash_by_username("test")
+    actual_password_hashed = actual_password_hashed["password_hash"]
+
+    with open("authentication/passwords.txt", "r") as file:
+        lines = file.readlines()
+    for line in lines:
+        if line.split(":")[0] == "test":
+            salt = line.split(":")[1]
+    new_password_hashed = hash_password(new_password, salt)
+
+    if  actual_password_hashed != new_password_hashed[1]:
+        error = f"password did not change, Expected {new_password_hashed[1]}, actual {actual_password_hashed}"
+        return False, error
+    return True, "Password was changed"
 
 
 

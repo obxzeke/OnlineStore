@@ -13,6 +13,9 @@ VALUES ('bliskov', '1e4b9ae956cad1385cfa6fffd8323dd16c3fe18c54e6447e49bddef2138d
 INSERT into `users` (`username`, `password_hash`, `email`, `first_name`, `last_name`, `is_admin`)
 VALUES ('admin', '2c6d096c92b3571068ca814db6ca92d0ac2e8b079d750a2e78b59cb37da0ee832ff7fea65787d3e645f6733cd04e32a528bf203f691e3dbdccd1582f668d0bc1', 'admin@admin.com', 'admin', 'admin', 1);
 
+INSERT into `users` (`username`, `password_hash`, `email`, `first_name`, `last_name`, `is_admin`)
+Values ('test', 'ce69f4d09c0781eed0b2ef4b647388cbe94c17e0324841b7de3420605a1794371ab9269ca9c1c7d63555c964822ffd1aa49278b81731cfc91693b9085ba45e7d', 'test@test.com', 'test', 'test', 0);
+
 INSERT into `inventory` (`item_name`, `info`, `price`, `stock`, `image_url`, `category`)
 VALUES ('Apples', 'An edible cultivation of the Malus genus.', 2.00, 100, 'static/images/apple.jpeg', 'Fruit');
 
