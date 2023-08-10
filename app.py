@@ -3,7 +3,7 @@
 from authentication.auth_tools import login_pipeline, update_passwords, hash_password
 from database.db import Database
 from flask import Flask, redirect, render_template, request
-from core.session import Sessions
+from core.session import Sessions, UserSession
 
 app = Flask(__name__)
 HOST, PORT = 'localhost', 8080
@@ -66,29 +66,19 @@ def login():
         if login_pipeline(username, password):
             is_admin = db.is_admin_by_username(username)
             sessions.add_new_session(username, db)
+            global current_username
+            current_username = username
             return render_template('home.html', products=products, sessions=sessions, is_admin = is_admin)
         else:
-            print(f"Incorrect username ({username}) or password ({password}).")
-            return render_template('index.html', products=products, sessions=sessions)
+            return redirect('/login?login=false')
     else:
-        return render_template('home.html', products=products, sessions=sessions, is_admin = is_admin)
+        return render_template('home.html', products=products, sessions=sessions, is_admin = db.is_admin_by_username(current_username))
 
 
-@app.route('/register')
-def register_page():
-    """
-    Renders the register page when the user is at the `/register` endpoint.
-
-    args:
-        - None
-
-    returns:
-        - None
-    """
-    return render_template('register.html')
 
 
-@app.route('/register', methods=['POST'])
+
+@app.route('/register', methods=['POST', 'GET'])
 def register():
     """
     Renders the index page when the user is at the `/register` endpoint with a POST request.
@@ -103,15 +93,17 @@ def register():
         - passwords.txt: adds a new username and password combination to the file
         - database/store_records.db: adds a new user to the database
     """
-    username = request.form['username']
-    password = request.form['password']
-    email = request.form['email']
-    first_name = request.form['first_name']
-    last_name = request.form['last_name']
-    salt, key = hash_password(password)
-    update_passwords(username, key, salt)
-    db.insert_user(username, key, email, first_name, last_name)
-    return render_template('index.html')
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        salt, key = hash_password(password)
+        update_passwords(username, key, salt)
+        db.insert_user(username, key, email, first_name, last_name)
+        return render_template('login.html')
+    return render_template('register.html')
 
 
 @app.route('/checkout', methods=['POST'])
@@ -207,7 +199,7 @@ def settings_page():
     """
     return render_template('settings.html')
 
-@app.route('/change_password', methods=['GET'])
+@app.route('/change_password', methods=['POST','GET'])
 def change_password_page():
     """
     Renders the change password page
@@ -217,8 +209,19 @@ def change_password_page():
 
     returns:
         - None
+
+    modifies:
+        - user's password
     """
-    return render_template('change_password.html')
+    if request.method == 'POST':
+        old_password = request.form['old_password']
+        new_password = request.form['new_password']
+        if sessions.get_session(current_username).reset_user_password(old_password, new_password):
+            return redirect('/change_password?success=true')
+        else:
+            return redirect('/change_password?success=false')
+
+    return render_template('change_password.html', username = current_username)
 
 @app.route('/view_inventory', methods=['GET'])
 def view_inventory():

@@ -127,19 +127,8 @@ class UserSession:
         """
         return self.cart
         
-    def get_user_password(self) -> str:
-        """
-        Gets the users password in hash
 
-        args:
-            - None
-
-        returns:
-            - tuple with the users password in has form
-        """
-        Database.get_password_hash_by_username(self.username)
-
-    def reset_user_password(self, old_password: str, new_password: str) -> bool:
+    def reset_user_password(self, users_old_password_input: str, new_password: str) -> bool:
         """
         Called when the user wants to reset their password
 
@@ -150,7 +139,7 @@ class UserSession:
         returns:
             - True if successful change, false if failed
         """
-        if check_password(old_password):
+        if login_pipeline(self.username, users_old_password_input):
             self.set_user_password(new_password)
             return True
         else:
@@ -170,30 +159,9 @@ class UserSession:
         hashed_password_tuple = hash_password(new_password)
         update_passwords(self.username, hashed_password_tuple[1], hashed_password_tuple[0])
 
-        seperator = ""
-        hashed_password = seperator.join(hashed_password_tuple)
-        Database.set_password_hash(self.username, hashed_password)
+        key = hashed_password_tuple[1]
+        self.db.set_password_hash(self.username, key)
 
-    def change_username(self, new_username: str, password) -> bool:
-        """
-        Called when the user wants to change their username. Also changes username in database and passwords.txt
-
-        args:
-            - new_username: the new username
-            - password: the user's password
-
-        returns:
-            - True if successful change, false if failed
-        """
-        if login_pipeline(self.username, password):
-            if username_exists(new_username) == False:
-                Database.set_username(new_username)
-                update_username(self.username, new_username, password)
-                return True
-            else:
-                return False
-        else:
-            return False
 
 class Sessions:
     """
