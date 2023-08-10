@@ -5,6 +5,6 @@ print(os.getcwd())
 
 
 class test():
-    db = Database('onlineStoreTemplate/database/store_records.db')
+    db = Database('database/store_records.db')
     
     print(db.product_exists(1))
