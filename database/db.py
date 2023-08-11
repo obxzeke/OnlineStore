@@ -16,6 +16,9 @@ class Database:
         - cursor: The cursor of the database.
     """
 
+    import os
+    print(os.getcwd())
+
     def __init__(self, database_path: str = "store_records.db") -> None:
         self.database_path = database_path
         self.connection = sqlite3.connect(
@@ -346,7 +349,7 @@ class Database:
     # ------------------ Users -------------------
     # --------------------------------------------
 
-    def insert_user(self, username: str, password_hash: str, email: str, first_name: str, last_name: str) -> None:
+    def insert_user(self, username: str, password_hash: str, email: str, first_name: str, last_name: str, is_admin: int = 0) -> None:
         """
         Inserts a new user into the database.
 
@@ -359,8 +362,8 @@ class Database:
             - None
         """
         self.cursor.execute(
-            "INSERT INTO users (username, password_hash, email, first_name, last_name) VALUES (?, ?, ?, ?, ?)",
-            (username, password_hash, email, first_name, last_name))
+            "INSERT INTO users (username, password_hash, email, first_name, last_name, is_admin) VALUES (?, ?, ?, ?, ?, ?)",
+            (username, password_hash, email, first_name, last_name, is_admin))
         self.connection.commit()
 
     # ------ Getter methods ------

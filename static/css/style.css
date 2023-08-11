@@ -255,3 +255,19 @@ th {
 .review-inputs {
     text-align: center;
 }
+
+.inline {
+    display: inline;
+    width: auto;
+}
+
+.home-button {
+    float: right;
+    margin-right: 60px;
+    margin-bottom: 0px
+}
+
+.settings-button{
+    float: right;
+    margin-right: 20px;
+}

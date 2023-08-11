@@ -22,7 +22,7 @@ class UserSession:
 
     def __init__(self, username: str, db: Database):
         self.username = username
-        self.total_cost = 0
+        self.total_cost = 0.0
         self.date = datetime.now()
         self.db = db
         self.cart = self.empty_cart()
@@ -114,20 +114,21 @@ class UserSession:
         """
         self.update_total_cost()
         self.date = datetime.now()
+
+    def get_cart(self) ->dict:
+        """
+        Returns currents sessions cart
         
-    def get_user_password(self) -> str:
-        """
-        Gets the users password in hash
-
         args:
-            - None
-
-        returns:
-            - tuple with the users password in has form
+            -None
+        
+        returns
+            -dict of current cart
         """
-        Database.get_password_hash_by_username(self.username)
+        return self.cart
+        
 
-    def reset_user_password(self, old_password: str, new_password: str) -> bool:
+    def reset_user_password(self, users_old_password_input: str, new_password: str) -> bool:
         """
         Called when the user wants to reset their password
 
@@ -138,7 +139,7 @@ class UserSession:
         returns:
             - True if successful change, false if failed
         """
-        if check_password(old_password):
+        if login_pipeline(self.username, users_old_password_input):
             self.set_user_password(new_password)
             return True
         else:
@@ -158,30 +159,9 @@ class UserSession:
         hashed_password_tuple = hash_password(new_password)
         update_passwords(self.username, hashed_password_tuple[1], hashed_password_tuple[0])
 
-        seperator = ""
-        hashed_password = seperator.join(hashed_password_tuple)
-        Database.set_password_hash(self.username, hashed_password)
+        key = hashed_password_tuple[1]
+        self.db.set_password_hash(self.username, key)
 
-    def change_username(self, new_username: str, password) -> bool:
-        """
-        Called when the user wants to change their username. Also changes username in database and passwords.txt
-
-        args:
-            - new_username: the new username
-            - password: the user's password
-
-        returns:
-            - True if successful change, false if failed
-        """
-        if login_pipeline(self.username, password):
-            if username_exists(new_username) == False:
-                Database.set_username(new_username)
-                update_username(self.username, new_username, password)
-                return True
-            else:
-                return False
-        else:
-            return False
 
 class Sessions:
     """
@@ -279,40 +259,3 @@ class Sessions:
             - A dictionary of user sessions.
         """
         return self.sessions
-    
-class AdminSession:
-    """
-    AdminSession is a class that represents an admins session
-
-    args:
-        - username: The username of the user.
-        - db: The database to use.
-
-    attributes:
-        - username: The username of the user.
-        - date: The date of the user's session.
-        - db: The database to use.
-    """
-
-    def __init__(self, username: str, db: Database):
-        self.username = username
-        self.date = None
-        self.db = db
-
-    def add_new_product(self, name: str, price: int, info: str) -> None:
-        Database.insert_new_item(name, price, info)
-
-    def remove_product(self, id: int) -> None:
-        Database.set_item_stock(id, 0)
-
-    def update_product_inventory(self, id: int, inventory: int) -> None:
-        Database.set_item_stock(id, inventory)
-
-    def view_all_item_ids(self) -> Database:
-        Database.get_all_item_ids()
-
-    def view_user_list(self) -> Database:
-        Database.get_all_user_information()
-
-    def sales_report(self, start_date: datetime, end_date: datetime) -> Database:
-        Database.get_full_sales_information()

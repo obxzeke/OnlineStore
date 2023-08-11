@@ -17,4 +17,18 @@
         </form>
     </div>
 </div>
+
+<script>
+    function showPopup() {
+        alert("Wrong username or password")
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const login = urlParams.get("login");
+
+    if (login === "false"){
+        showPopup()
+    }
+    </script>
+
 {% endblock %}
