@@ -1,8 +1,11 @@
-# Online Store Template
+# Online Store
 
 ## Description
 
-This repository contains template code for a simple online store, built for my students in ITSC 3155 - Software Engineering at UNC Charlotte. Since the code is written as a starting template for students' group final projects, this repository should not be seen as a complete, production-ready online store. Functional features like user session management, database access, unit testing, and server-side rendering are included but kept at an abstract level. Users are instructed to fork this repository and customize it to the needs of their own project.
+This repository stands as a vibrant Flask-based mock e-commerce platform crafted with Python, showcasing the collaborative efforts of a dynamic team from the Software Engineering class (ITSC 3155) at UNCC. Elevating our project, we incorporated an SQL database for refined data management and seamlessly integrated a hashing system to fortify the authentication process for secure logins.
+
+## Demo Video
+https://www.loom.com/share/6072dd8757254b4e8c86ff653144dfb6?sid=79b32f5a-caa1-459b-8704-09ac5c051056
 
 ## How to Use
 
@@ -29,6 +32,9 @@ python3 reset_database.py
 ### Running the Server
 
 Once all installation steps are complete, the `app.py` script can be run to start the server. Follow the local server URL that is printed to the console to view the website.
+
+### Admin Privlages 
+Use login username: admin password: admin for admin privileges.
 
 ## Documentation Style
 
